@@ -49,7 +49,7 @@ function retrieveDetails() {
     console.log("test");
 }
 
-jQuery(document).ready(function($) {
+$(document).ready(function($) {
     $("tr").click(function() {
         console.log("clicked");
     });
