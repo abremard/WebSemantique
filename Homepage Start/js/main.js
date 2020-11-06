@@ -1,6 +1,6 @@
 function searchButton() {
     search = document.getElementById("search").value;
-    window.location.href = "./result.html?search="+search;
+    window.location.href = "./Results.html?search="+search;
     sparqlQuery = buildQuery(search);
 }
 
@@ -42,7 +42,7 @@ function jsonParseGameList(jsonObject) {
     jsonObject.results.bindings.forEach(elem => {
         var name = elem.name.value;
         var uri = elem.jv.value;
-        document.getElementById("resultTable").innerHTML += "<tr><td onclick=retrieveDetails("+uri+")>"+name+"</td></tr>";
+        document.getElementById("resultTable").innerHTML += "<tr onclick=retrieveDetails("+uri+")><h2>"+name+"</h2><p>2016</p><p>This is a game description.</p></tr>" 
     });
 }
 
