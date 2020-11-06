@@ -39,18 +39,16 @@ function jsonParseGameList(jsonObject) {
     jsonObject.results.bindings.forEach(elem => {
         var name = elem.name.value;
         var uri = elem.jv.value;
-        document.getElementById("resultTable").innerHTML += "<tr data-rdf="+uri+"><h2>"+name+"</h2><p>2016</p><p>This is a game description.</p></tr>";
+        document.getElementById("resultTable").innerHTML += "<tr class='clickable-row'><h2>"+name+"</h2><p>2016</p><p>This is a game description.</p></tr>";
     });
 }
 
-function retrieveDetails(uri) {
-    console.log(uri);
+function retrieveDetails() {
+    console.log("test");
 }
 
-$('tr').click(function() {
-    console.log("clicked");
-});
-
-$('tr').mouseover(function() {
-    console.log("mouse over");
+jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        console.log("clicked");
+    });
 });
