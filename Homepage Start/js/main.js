@@ -36,11 +36,13 @@ function getGame(uri) {
 }
 
 function jsonParseGameList(jsonObject) {
+    tmpHtml = "";
     jsonObject.results.bindings.forEach(elem => {
         var name = elem.name.value;
         var uri = elem.jv.value;
-        document.getElementById("resultTable").innerHTML += "<tr class='clickable-row'><h2>"+name+"</h2><p>2016</p><p>This is a game description.</p></tr>";
+        tmpHtml += "<tr><td><h2>"+name+"</h2><p>2016</p><p>This is a game description.</p></td></tr>";
     });
+    document.getElementById("resultTable").innerHTML = tmpHtml;
 }
 
 function retrieveDetails() {
@@ -48,7 +50,7 @@ function retrieveDetails() {
 }
 
 jQuery(document).ready(function($) {
-    $(".clickable-row").click(function() {
+    $("tr").click(function() {
         console.log("clicked");
     });
 });
