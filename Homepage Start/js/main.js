@@ -6,7 +6,6 @@ function searchButton() {
 
 function buildQuery() {
     search = window.location.search.split("=")[1];
-    console.log("building query");
     sparqlQuery = "SELECT * WHERE {?jv a dbo:VideoGame; foaf:name ?name. FILTER ( regex(?jv, 'Mario.*', 'i') )} LIMIT 100";
     sparqlQuery = encodeURIComponent(sparqlQuery);
     // jsonResponse = sendRequest(sparqlQuery).then((req, res) => {
@@ -15,7 +14,6 @@ function buildQuery() {
     //     jsonParseGameList(jsonResponse);
     // });
     jsonResponse = sendRequest(sparqlQuery);
-    console.log(jsonResponse);
     jsonParseGameList(jsonResponse);
     return sparqlQuery;
 }
@@ -38,14 +36,21 @@ function getGame(uri) {
 }
 
 function jsonParseGameList(jsonObject) {
-    console.log(jsonObject.results.bindings);
     jsonObject.results.bindings.forEach(elem => {
         var name = elem.name.value;
         var uri = elem.jv.value;
-        document.getElementById("resultTable").innerHTML += "<tr onclick=retrieveDetails("+uri+")><h2>"+name+"</h2><p>2016</p><p>This is a game description.</p></tr>" 
+        document.getElementById("resultTable").innerHTML += "<tr data-rdf="+uri+"><h2>"+name+"</h2><p>2016</p><p>This is a game description.</p></tr>";
     });
 }
 
 function retrieveDetails(uri) {
-    
+    console.log(uri);
 }
+
+$('tr').click(function() {
+    console.log("clicked");
+});
+
+$('tr').mouseover(function() {
+    console.log("mouse over");
+});
