@@ -1,10 +1,10 @@
-
 function buildQuery() {
     searchString = window.location.search.split("=")[1];
-    sparqlQuery = "SELECT * WHERE {?jv a dbo:VideoGame; foaf:name ?name. FILTER ( regex(?jv, '"+searchString+".*', 'i') )} LIMIT 100";
+    sparqlQuery = "SELECT * WHERE {?jv a dbo:VideoGame; foaf:name ?name; dbo:composer ?composer; dbp:gamezone ?gamezone. FILTER ( regex(?jv, '"+searchString+".*', 'i') )} LIMIT 100 ";
     sparqlQuery = encodeURIComponent(sparqlQuery);
     jsonResponse = sendRequest(sparqlQuery);
     jsonParseGameList(jsonResponse);
+    console.log(jsonResponse);
     return sparqlQuery;
 }
 
@@ -28,16 +28,31 @@ function getGame(uri) {
 function jsonParseGameList(jsonObject) {
     var tmpHtml = "";
     jsonObject.results.bindings.forEach(elem => {
-        var name = elem.name.value;
         var uri = elem.jv.value;
-        tmpHtml += "<tr><td><h2>"+name+"</h2><p>2016</p><p>This is a game description.</p></td></tr>";
+        tmpHtml += "<tr data-uri="+uri+"><td>";
+        if (elem.name.value !== "") {
+            var name = elem.name.value;
+            tmpHtml += "<h2>"+name+"</h2>";            
+        }
+        // if (elem.name.value !== "") {
+        //     var name = elem.name.value;
+        //     tmpHtml += "<h2>"+name+"</h2>";            
+        // }
+        // if (elem.name.value !== "") {
+        //     var name = elem.name.value;
+        //     tmpHtml += "<h2>"+name+"</h2>";            
+        // }
+        // var uri = elem.jv.value;
+        var year = "2016";
+        tmpHtml += "<p>"+year+"</p>";
+        tmpHtml += "<p>This is a game description.</p></td></tr>";
     });
     document.getElementById("resultTable").innerHTML = tmpHtml;
 }
 
-function retrieveDetails() {
-    console.log("test");
-    // todo redirect to game.html with the correct uri as parameter
+function retrieveDetails(e) {
+    var game = e.dataset.uri;
+    window.location.href = "../game.html?game="+game;
 }
 
 
@@ -45,14 +60,10 @@ $(document).ready(function($) {
 
     console.log("ready");
 
-    $("tr").click(function() {
-        retrieveDetails();
+    $("tr").click(function(e) {
+        retrieveDetails(e);
     });
 
     buildQuery();
 
 });
-
-// $(document).onload(($) => {
-//
-// })
