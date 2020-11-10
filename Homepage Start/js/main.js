@@ -1,18 +1,13 @@
 function searchButton() {
-    search = document.getElementById("search").value;
-    window.location.href = "./Results.html?search="+search;
-    sparqlQuery = buildQuery(search);
+    searchString = document.getElementById("search").value;
+    window.location.href = "./Results.html?search="+searchString;
+    sparqlQuery = buildQuery();
 }
 
 function buildQuery() {
-    search = window.location.search.split("=")[1];
-    sparqlQuery = "SELECT * WHERE {?jv a dbo:VideoGame; foaf:name ?name. FILTER ( regex(?jv, 'Mario.*', 'i') )} LIMIT 100";
+    searchString = window.location.search.split("=")[1];
+    sparqlQuery = "SELECT * WHERE {?jv a dbo:VideoGame; foaf:name ?name. FILTER ( regex(?jv, '"+searchString+".*', 'i') )} LIMIT 100";
     sparqlQuery = encodeURIComponent(sparqlQuery);
-    // jsonResponse = sendRequest(sparqlQuery).then((req, res) => {
-    //     console.log("fin reponse");
-    //     console.log(jsonResponse);
-    //     jsonParseGameList(jsonResponse);
-    // });
     jsonResponse = sendRequest(sparqlQuery);
     jsonParseGameList(jsonResponse);
     return sparqlQuery;
