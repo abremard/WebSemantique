@@ -30,7 +30,7 @@ function jsonParseGameList(jsonObject) {
     var tmpHtml = "";
     jsonObject.results.bindings.forEach(elem => {
         var uri = elem.jv.value;
-        tmpHtml += "<tr onclick='window.location=\"./game.html?game=+uri\"'><td>";
+        tmpHtml += "<tr onclick='window.location=\"./game.html?game="+uri+"\"'><td>";
         if (elem.name.value !== "") {
             var name = elem.name.value;
             tmpHtml += "<h2>"+name+"</h2>";            
