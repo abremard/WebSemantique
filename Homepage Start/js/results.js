@@ -51,8 +51,10 @@ function jsonParseGameList(jsonObject) {
 }
 
 function retrieveDetails(e) {
-    var game = e.dataset.uri;
-    window.location.href = "../game.html?game="+game;
+
+    console.log("click !");
+    // var game = e.dataset.uri;
+    // window.location.href = "../game.html?game="+game;
 }
 
 
@@ -60,10 +62,10 @@ $(document).ready(function($) {
 
     console.log("ready");
 
+    buildQuery();
+
     $("tr").click(function(e) {
         retrieveDetails(e);
     });
-
-    buildQuery();
 
 });
