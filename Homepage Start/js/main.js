@@ -4,6 +4,7 @@ function searchButton() {
     sparqlQuery = buildQuery(search);
 }
 
+
 function buildQuery() {
     search = window.location.search.split("=")[1];
     sparqlQuery = "SELECT * WHERE {?jv a dbo:VideoGame; foaf:name ?name. FILTER ( regex(?jv, 'Mario.*', 'i') )} LIMIT 100";
@@ -36,7 +37,7 @@ function getGame(uri) {
 }
 
 function jsonParseGameList(jsonObject) {
-    tmpHtml = "";
+    var tmpHtml = "";
     jsonObject.results.bindings.forEach(elem => {
         var name = elem.name.value;
         var uri = elem.jv.value;
@@ -54,4 +55,14 @@ $(document).ready(function($) {
     $("tr").click(function() {
         retrieveDetails();
     });
+
+
+    $("#search").keyup(function(ev) {
+        // 13 = ENTER
+        if (ev.which === 13) {
+            console.log("enter on input field");
+            searchButton();
+        }
+    });
+
 });
