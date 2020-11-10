@@ -42,10 +42,11 @@ function jsonParseGameList(jsonObject) {
 
 function retrieveDetails() {
     console.log("test");
+    // todo redirect to game.html with the correct uri as parameter
 }
 
 $(document).ready(function($) {
     $("tr").click(function() {
-        console.log("clicked");
+        retrieveDetails();
     });
 });
