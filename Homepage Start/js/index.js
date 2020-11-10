@@ -5,20 +5,12 @@ function searchButton() {
 
 $(document).ready(function($) {
 
-    $("#search").keyup(function(ev) {
-
-        // console.log("keyup");
-        // 13 = ENTER
-        if (ev.which === 13) {
-            // console.log("enter on input field");
-            searchButton();
-        }
-
-        // console.log(ev.which);
+    $("#searchForm").submit(function() {
+        searchButton();
+        return false;
     });
 
 });
-
 
 function chooseWallpaper() {
     var elem = document.getElementById("background");
