@@ -1,18 +1,14 @@
 function searchButton() {
-    search = document.getElementById("search").value;
-    window.location.href = "./Results.html?search="+search;
-    sparqlQuery = buildQuery(search);
+    searchString = document.getElementById("search").value;
+    window.location.href = "./Results.html?search="+searchString;
+    sparqlQuery = buildQuery();
 }
 
+
 function buildQuery() {
-    search = window.location.search.split("=")[1];
-    sparqlQuery = "SELECT * WHERE {?jv a dbo:VideoGame; foaf:name ?name. FILTER ( regex(?jv, 'Mario.*', 'i') )} LIMIT 100";
+    searchString = window.location.search.split("=")[1];
+    sparqlQuery = "SELECT * WHERE {?jv a dbo:VideoGame; foaf:name ?name. FILTER ( regex(?jv, '"+searchString+".*', 'i') )} LIMIT 100";
     sparqlQuery = encodeURIComponent(sparqlQuery);
-    // jsonResponse = sendRequest(sparqlQuery).then((req, res) => {
-    //     console.log("fin reponse");
-    //     console.log(jsonResponse);
-    //     jsonParseGameList(jsonResponse);
-    // });
     jsonResponse = sendRequest(sparqlQuery);
     jsonParseGameList(jsonResponse);
     return sparqlQuery;
@@ -36,15 +32,18 @@ function getGame(uri) {
 }
 
 function jsonParseGameList(jsonObject) {
+    var tmpHtml = "";
     jsonObject.results.bindings.forEach(elem => {
         var name = elem.name.value;
         var uri = elem.jv.value;
-        document.getElementById("resultTable").innerHTML += "<tr class='clickable-row'><h2>"+name+"</h2><p>2016</p><p>This is a game description.</p></tr>";
+        tmpHtml += "<tr><td><h2>"+name+"</h2><p>2016</p><p>This is a game description.</p></td></tr>";
     });
+    document.getElementById("resultTable").innerHTML = tmpHtml;
 }
 
 function retrieveDetails() {
     console.log("test");
+    // todo redirect to game.html with the correct uri as parameter
 }
 
 function chooseWallpaper() {
@@ -54,8 +53,18 @@ function chooseWallpaper() {
     elem.style.background = photo;
 }
 
-jQuery(document).ready(function($) {
-    $(".clickable-row").click(function() {
-        console.log("clicked");
+$(document).ready(function($) {
+    $("tr").click(function() {
+        retrieveDetails();
     });
+
+
+    $("#search").keyup(function(ev) {
+        // 13 = ENTER
+        if (ev.which === 13) {
+            console.log("enter on input field");
+            searchButton();
+        }
+    });
+
 });
