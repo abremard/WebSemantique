@@ -1,10 +1,11 @@
 function buildQuery() {
     searchString = window.location.search.split("=")[1];
-    sparqlQuery = "SELECT * WHERE {?jv a dbo:VideoGame; foaf:name ?name; dbo:composer ?composer; dbp:gamezone ?gamezone. FILTER ( regex(?jv, '"+searchString+".*', 'i') )} LIMIT 100 ";
+    sparqlQuery = 'SELECT * WHERE {?jv a dbo:VideoGame. ?jv foaf:name ?name. FILTER ( regex(?jv, "'+searchString+'.*", "i") )}';
+    console.log(sparqlQuery);
     sparqlQuery = encodeURIComponent(sparqlQuery);
     jsonResponse = sendRequest(sparqlQuery);
-    jsonParseGameList(jsonResponse);
     console.log(jsonResponse);
+    jsonParseGameList(jsonResponse);
     return sparqlQuery;
 }
 
@@ -29,7 +30,7 @@ function jsonParseGameList(jsonObject) {
     var tmpHtml = "";
     jsonObject.results.bindings.forEach(elem => {
         var uri = elem.jv.value;
-        tmpHtml += "<tr data-uri="+uri+"><td>";
+        tmpHtml += "<tr onclick='window.location=\"./game.html?game=+uri\"'><td>";
         if (elem.name.value !== "") {
             var name = elem.name.value;
             tmpHtml += "<h2>"+name+"</h2>";            
@@ -52,8 +53,9 @@ function jsonParseGameList(jsonObject) {
 
 function retrieveDetails(e) {
 
-    console.log("click !");
-    // var game = e.dataset.uri;
+    // console.log("click !");
+    console.log(e.dataset.uri);
+    var game = e.dataset.uri;
     // window.location.href = "../game.html?game="+game;
 }
 
