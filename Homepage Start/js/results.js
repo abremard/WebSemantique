@@ -40,12 +40,6 @@ function retrieveDetails() {
     // todo redirect to game.html with the correct uri as parameter
 }
 
-function chooseWallpaper() {
-    var elem = document.getElementById("background");
-    var num = Math.floor((Math.random()*3) + 1);
-    var photo = "url(./images/" + num + ".png)";
-    elem.style.background = photo;
-}
 
 $(document).ready(function($) {
 
