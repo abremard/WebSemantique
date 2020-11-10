@@ -1,9 +1,3 @@
-function searchButton() {
-    searchString = document.getElementById("search").value;
-    window.location.href = "./Results.html?search="+searchString;
-    sparqlQuery = buildQuery();
-}
-
 
 function buildQuery() {
     searchString = window.location.search.split("=")[1];
@@ -46,25 +40,19 @@ function retrieveDetails() {
     // todo redirect to game.html with the correct uri as parameter
 }
 
-function chooseWallpaper() {
-    var elem = document.getElementById("background");
-    var num = Math.floor((Math.random()*3) + 1);
-    var photo = "url(./images/" + num + ".png)";
-    elem.style.background = photo;
-}
 
 $(document).ready(function($) {
+
+    console.log("ready");
+
     $("tr").click(function() {
         retrieveDetails();
     });
 
-
-    $("#search").keyup(function(ev) {
-        // 13 = ENTER
-        if (ev.which === 13) {
-            console.log("enter on input field");
-            searchButton();
-        }
-    });
+    buildQuery();
 
 });
+
+// $(document).onload(($) => {
+//
+// })
