@@ -51,23 +51,9 @@ function jsonParseGameList(jsonObject) {
     document.getElementById("resultTable").innerHTML = tmpHtml;
 }
 
-function retrieveDetails(e) {
-
-    // console.log("click !");
-    console.log(e.dataset.uri);
-    var game = e.dataset.uri;
-    // window.location.href = "../game.html?game="+game;
-}
-
-
 $(document).ready(function($) {
 
     console.log("ready");
-
     buildQuery();
-
-    $("tr").click(function(e) {
-        retrieveDetails(e);
-    });
 
 });
