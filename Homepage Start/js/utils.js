@@ -2,7 +2,7 @@
 function removeDuplicates(dupes) {
 
     // attributs problématiques
-    const conflictFields = ["awardName", "composerName", "computingPlatformName", "directorName"];
+    const conflictFields = ["awardName", "composerName", "computingPlatformName", "directorName", "jv2"];
 
     let result = JSON.parse(JSON.stringify(dupes.results.bindings[0]));     // separate copy of the object
 
