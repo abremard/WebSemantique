@@ -6,9 +6,8 @@ function fillInfo(JSONresponse) {
         document.getElementById("game-title").innerHTML = gameTitle;
     }
     if (game.computingPlatformName !== null && game.computingPlatformName !== undefined) {
-        // tell Stefan to add platform to html
         var gamePlatform = game.computingPlatformName.value;
-        // document.getElementById("game-platform").innerHTML = " Genre: "+gamePlatform;
+        document.getElementById("game-platform").innerHTML = gamePlatform;
     }
     if (game.label !== null && game.label !== undefined) {
         var gameGenre = game.label.value;
@@ -39,6 +38,15 @@ function fillInfo(JSONresponse) {
         var releaseDate = game.releaseDate.value;
         document.getElementById("game-release").innerHTML = releaseDate;
     }
+    if (game.seriesName !== null && game.seriesName !== undefined)
+    {
+        var seriesName = game.seriesName.value;
+        document.getElementById("series-name").innerHTML = "This game is a part of the "+seriesName+" series";
+        //call sparql query to get names of video games 
+
+    } else {
+        document.getElementById("gameSeries").style.display = "none";
+    }
 }
 
 function buildQuery() {
@@ -57,6 +65,7 @@ function sendRequest(sparqlQuery) {
     xmlHttp.open( "GET", url, false ); // false for synchronous request
     xmlHttp.send( null );
     response = JSON.parse(xmlHttp.response);
+    console.log(response);
     return response;
 }
 
