@@ -8,6 +8,15 @@ function fillInfo(JSONresponse) {
     if (game.computingPlatformName !== null && game.computingPlatformName !== undefined) {
         var gamePlatform = game.computingPlatformName.value;
         document.getElementById("game-platform").innerHTML = gamePlatform;
+        var codeToPlace = "";
+        var jsonData = game.computingPlatformName;
+        for (var i = 0; i < jsonData.length; i++) {
+            var platform = jsonData[i];
+            if (platform !== null && platform !== undefined ) {
+                codeToPlace += platform.value + ", ";
+            }
+        }
+        document.getElementById("game-platform").innerHTML = codeToPlace;
     }
     if (game.label !== null && game.label !== undefined) {
         var gameGenre = game.label.value;
