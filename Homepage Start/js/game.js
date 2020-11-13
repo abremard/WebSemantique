@@ -1,6 +1,6 @@
 
 function fillInfo(JSONresponse) {
-    var game = JSONresponse.results.bindings[0];
+    var game = JSONresponse;
     if (game.name !== null && game.name !== undefined) {
         var gameTitle = game.name.value; // = game.jv.value;
         document.getElementById("game-title").innerHTML = gameTitle;
@@ -30,13 +30,24 @@ function fillInfo(JSONresponse) {
         var gameDescription = game.desc.value;
         document.getElementById("game-description").innerHTML = ""+gameDescription;
     }
+    if (game.score !== null && game.score !== undefined) {
+        var gameScore = game.score.value;
+        document.getElementById("game-score").className = "c100 p"+gameScore+" small green";
+        document.getElementById("game-score-span").innerHTML = gameScore;
+    }
+    if (game.releaseDate !== null && game.releaseDate !== undefined) {
+        var releaseDate = game.releaseDate.value;
+        document.getElementById("game-release").innerHTML = releaseDate;
+    }
 }
 
 function buildQuery() {
     searchString = decodeURIComponent(window.location.search.split("=")[1]);
-    sparqlQuery = "SELECT ?jv, ?name, ?computingPlatformName, ?seriesName, ?directorName, ?label, ?publisherName, ?developerName, ?composerName, str(?score), ?desc WHERE {?jv a dbo:VideoGame. OPTIONAL {?jv foaf:name ?name.} OPTIONAL {?jv dbo:abstract ?desc.} OPTIONAL {?jv dbo:genre ?genre.?genre rdfs:label ?label.} OPTIONAL {?jv dbo:composer ?composer.?composer foaf:name ?composerName.} OPTIONAL {?jv dbo:developer ?developer.?developer foaf:name ?developerName.} OPTIONAL {?jv dbo:publisher ?publisher.?publisher foaf:name ?publisherName.} OPTIONAL {?jv dbo:director ?director.?director foaf:name ?directorName.} OPTIONAL{?jv dbo:series ?series.?series rdfs:label ?seriesName.} OPTIONAL{?jv dbo:computingPlatform ?computingPlatform.?computingPlatform rdfs:label ?computingPlatformName.} OPTIONAL{?jv dbp:ign ?score.}FILTER (?jv = <"+searchString+"> && langMatches(lang(?desc),'EN') && langMatches(lang(?label),'EN') && langMatches(lang(?seriesName),'EN') && langMatches(lang(?computingPlatformName),'EN'))} LIMIT 1";
+    sparqlQuery = "SELECT ?jv, ?name, ?computingPlatformName, ?seriesName, ?directorName, ?label, ?publisherName, ?developerName, ?composerName, ?score, ?desc, ?releaseDate WHERE {?jv a dbo:VideoGame. OPTIONAL {?jv foaf:name ?name.} OPTIONAL {?jv dbo:abstract ?desc.} OPTIONAL {?jv dbo:genre ?genre.?genre rdfs:label ?label.} OPTIONAL {?jv dbo:composer ?composer.?composer foaf:name ?composerName.} OPTIONAL {?jv dbo:developer ?developer.?developer foaf:name ?developerName.} OPTIONAL {?jv dbo:publisher ?publisher.?publisher foaf:name ?publisherName.} OPTIONAL {?jv dbo:director ?director.?director foaf:name ?directorName.} OPTIONAL{?jv dbo:series ?series.?series rdfs:label ?seriesName.} OPTIONAL{?jv dbo:computingPlatform ?computingPlatform.?computingPlatform rdfs:label ?computingPlatformName.} OPTIONAL{?jv dbp:mc ?score.} OPTIONAL{?jv dbo:releaseDate ?releaseDate.} FILTER (?jv = <"+searchString+"> && langMatches(lang(?desc),'EN') && langMatches(lang(?label),'EN') && langMatches(lang(?seriesName),'EN') && langMatches(lang(?computingPlatformName),'EN'))} LIMIT 1";
     sparqlQuery = encodeURIComponent(sparqlQuery);
     jsonResponse = sendRequest(sparqlQuery);
+    jsonResponse = removeDuplicates(jsonResponse);
+    console.log(jsonResponse);
     fillInfo(jsonResponse);
 }
 

@@ -11,8 +11,6 @@ function removeDuplicates(dupes) {
         result[field] = [result[field]];
     });
 
-    console.log(result);
-
     dupes.results.bindings.slice(1).forEach(elem => {
 
         conflictFields.forEach(field => {

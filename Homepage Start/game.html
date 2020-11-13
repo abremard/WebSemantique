@@ -7,7 +7,7 @@
     <link href="css/game.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="css/circle.css">
-    <script src="./js/jquery-3.5.1.js"></script>
+    <script src="js/utils.js"></script>
     <script src="js/game.js"></script>
     <script src="js/index.js"></script>
   </head>
@@ -39,8 +39,8 @@
           </td>
           <td>
             <div class="information">
-            <div class="c100 p12 small green">
-                    <span>12%</span>
+            <div id="game-score" class="c100 p0 small green">
+                    <span id="game-score-span">-</span>
                     <div class="slice">
                         <div class="bar"></div>
                         <div class="fill"></div>
@@ -82,12 +82,8 @@
               <h3 style="color: black;">More Information</h3>
               <table>
                 <tr>
-                  <td><h5 style="font-weight: bold;">Computing Platform</h5></td>
-                  <td><h5><span id="platform">-</span></h5></td>
-                </tr>
-                <tr>
-                  <td><h5 style="font-weight: bold;">First Release</h5></td>
-                  <td><h5>Super Mario Kart (1992-08-27)</h5></td>
+                  <td><h5 style="font-weight: bold;">Initial Release</h5></td>
+                  <td><h5 id="game-release">-</h5></td>
                 </tr>
               </table>
             </div>
