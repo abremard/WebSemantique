@@ -1,10 +1,10 @@
 function buildQuery() {
     searchString = decodeURIComponent(window.location.search.split("=")[1]);
     // sparqlQuery = 'SELECT * WHERE {?jv a dbo:VideoGame. ?jv foaf:name ?name. FILTER ( regex(?name, "'+searchString+'.*", "i") )}';
-    sparqlQuery = 'SELECT ?jv ?name (MIN(?date) AS ?releaseDate) WHERE { '
-        + '?jv a dbo:VideoGame. ?jv foaf:name ?name. ?jv dbo:releaseDate ?date.'
-        + ' FILTER ( regex(?name, "' + searchString + '.*", "i")) }'
-        + 'GROUP BY ?jv ?name';
+    sparqlQuery = 'SELECT ?jv ?name (MIN(?date) AS ?releaseDate) ?desc WHERE { '
+        + '?jv a dbo:VideoGame. ?jv foaf:name ?name. ?jv dbo:releaseDate ?date. ?jv dbo:abstract ?desc.'
+        + ' FILTER ( regex(?name, "' + searchString + '.*", "i") && langMatches(lang(?desc),\'EN\')) }'
+        + 'GROUP BY ?jv ?name ?desc';
 
     sparqlQuery = encodeURIComponent(sparqlQuery);
     jsonResponse = sendRequest(sparqlQuery);
@@ -30,6 +30,9 @@ function getGame(uri) {
 }
 
 function jsonParseGameList(jsonObject) {
+
+    const descSizeLimit = 140;
+
     var tmpHtml = "";
     jsonObject.results.bindings.forEach(elem => {
         var name = elem.jv.value.split("/resource/")[1];
@@ -41,18 +44,17 @@ function jsonParseGameList(jsonObject) {
             var name = elem.name.value;
             tmpHtml += "<h2>"+name+"</h2>";            
         }
-        // if (elem.name.value !== "") {
-        //     var name = elem.name.value;
-        //     tmpHtml += "<h2>"+name+"</h2>";            
-        // }
-        // if (elem.name.value !== "") {
-        //     var name = elem.name.value;
-        //     tmpHtml += "<h2>"+name+"</h2>";            
-        // }
-        // var uri = elem.jv.value;
+
         var year = elem.releaseDate.value;
-        tmpHtml += "<p>"+year+"</p>";
-        tmpHtml += "<p>This is a game description.</p></td></tr>";
+        tmpHtml += "<p><i>"+year+"</i></p>";
+
+        var description = "";
+        if (elem.desc.value.length > descSizeLimit){
+            description = elem.desc.value.slice(0, descSizeLimit) + "...";
+        } else {
+            description = elem.desc.value;
+        }
+        tmpHtml += "<p>" + description + "</p></td></tr>";
     });
     document.getElementById("resultTable").innerHTML = tmpHtml;
 }
