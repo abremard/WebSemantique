@@ -1,6 +1,11 @@
 function buildQuery() {
     searchString = decodeURIComponent(window.location.search.split("=")[1]);
-    sparqlQuery = 'SELECT * WHERE {?jv a dbo:VideoGame. ?jv foaf:name ?name. FILTER ( regex(?name, "'+searchString+'.*", "i") )}';
+    // sparqlQuery = 'SELECT * WHERE {?jv a dbo:VideoGame. ?jv foaf:name ?name. FILTER ( regex(?name, "'+searchString+'.*", "i") )}';
+    sparqlQuery = 'SELECT ?jv ?name (MIN(?date) AS ?releaseDate) WHERE { '
+        + '?jv a dbo:VideoGame. ?jv foaf:name ?name. ?jv dbo:releaseDate ?date.'
+        + ' FILTER ( regex(?name, "' + searchString + '.*", "i")) }'
+        + 'GROUP BY ?jv ?name';
+
     sparqlQuery = encodeURIComponent(sparqlQuery);
     jsonResponse = sendRequest(sparqlQuery);
     jsonParseGameList(jsonResponse);
@@ -45,7 +50,7 @@ function jsonParseGameList(jsonObject) {
         //     tmpHtml += "<h2>"+name+"</h2>";            
         // }
         // var uri = elem.jv.value;
-        var year = "2016";
+        var year = elem.releaseDate.value;
         tmpHtml += "<p>"+year+"</p>";
         tmpHtml += "<p>This is a game description.</p></td></tr>";
     });
