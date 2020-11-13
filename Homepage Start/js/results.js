@@ -27,8 +27,11 @@ function getGame(uri) {
 function jsonParseGameList(jsonObject) {
     var tmpHtml = "";
     jsonObject.results.bindings.forEach(elem => {
-        var uri = elem.jv.value;
-        tmpHtml += "<tr onclick='window.location=\"./game.html?game="+uri+"\"'><td>";
+        var name = elem.jv.value.split("/resource/")[1];
+        var path = elem.jv.value.split("/resource/")[0];
+        name = name.split("'").join("%27");
+        var uri = path+"/resource/"+name;
+        tmpHtml += '<tr onclick="window.location=\'./game.html?game='+uri+'\'"><td>';
         if (elem.name.value !== "") {
             var name = elem.name.value;
             tmpHtml += "<h2>"+name+"</h2>";            
