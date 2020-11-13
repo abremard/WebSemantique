@@ -34,13 +34,13 @@
         <tr>
           <td style="vertical-align: top; padding-top: 50px;">
             <div class="photo-frame">
-              <img src="images/cover.jpg" style="padding-right: 50px;">
+              <img src="images/placeholder.png" width="300px" style="padding-right: 50px;">
             </div>
           </td>
           <td>
             <div class="information">
             <div id="game-score" class="c100 p0 small green">
-                    <span id="game-score-span">-</span>
+                    <span id="game-score-span">N/A</span>
                     <div class="slice">
                         <div class="bar"></div>
                         <div class="fill"></div>
@@ -49,27 +49,30 @@
               <h1 id="game-title"></h1>
               <table>
                 <tr>
-                  <td><h2><i class="material-icons" style="font-size: 17px; color: black;">category</i><span id="game-genre"> Genre: -</span></h2></td>
-                  <td><h2><i class="material-icons" style="font-size: 17px; color: black;">edit</i><span id="game-studio"> Studio: - </span></h2></td>
-                  <td><h2><i class="material-icons" style="font-size: 17px; color: black;">apartment</i><span id="game-publisher"> Publisher: - </span></h2></td>
-                  <td><h2><i class="material-icons" style="font-size: 17px; color: black;">audiotrack</i><span id="game-composer"> Composer: - </span></h2></td>
+                  <td><h2><i class="material-icons" style="font-size: 17px; color: black;">category</i><span id="game-genre"> Genre: N/A</span></h2></td>
+                  <td><h2><i class="material-icons" style="font-size: 17px; color: black;">edit</i><span id="game-studio"> Studio: N/A </span></h2></td>
+                  <td><h2><i class="material-icons" style="font-size: 17px; color: black;">apartment</i><span id="game-publisher"> Publisher: N/A </span></h2></td>
+                  <td><h2><i class="material-icons" style="font-size: 17px; color: black;">audiotrack</i><span id="game-composer"> Composer: N/A </span></h2></td>
                 </tr>
               </table>
               <p id="game-description"></p>
+              <div id="award-panel">
+                <h3>Awards and recognitions</h3>
               <table>
                 <tr id="game-awards">
                   <td><h4><i class="material-icons" style="font-size: 16px; color: #edc302;">emoji_events</i>  Family Game of Year</h4></td>
                   <td><h4><i class="material-icons" style="font-size: 16px; color: #edc302;">emoji_events</i>  Game Innovation</h4></td>
                 </tr>
               </table>
+              </div>
               <br/>
               <div id="gameSeries">
-                <h3 style="color: black;">In this game series</h3>
+                <h3 style="color: black;"><span id="series-name">In this game series</span></h3>
                 <table style="text-align: center;" id="game-serie">
                   <tr>
-                    <td align="center"><img src="images/supercircuit.jpg" width="150px"></td>
-                    <td align="center"><img src="images/wii.jpg" width="150px"></td>
-                    <td align="center"><img src="images/8.jpg" width="150px"></td>
+                    <td align="center"><img src="images/placeholder.png" width="150px"></td>
+                    <td align="center"><img src="images/placeholder.png" width="150px"></td>
+                    <td align="center"><img src="images/placeholder.png" width="150px"></td>
                   </tr>
                   <tr>
                     <td width="150px"><h4>Mario Kart: Super Circuit</h4></td>
@@ -83,7 +86,11 @@
               <table>
                 <tr>
                   <td><h5 style="font-weight: bold;">Initial Release</h5></td>
-                  <td><h5 id="game-release">-</h5></td>
+                  <td><h5 id="game-release">N/A</h5></td>
+                </tr>
+                <tr>
+                  <td><h5 style="font-weight: bold;">Computing Platform</h5></td>
+                  <td><h5><span id="game-platform">N/A</span></h5></td>
                 </tr>
               </table>
             </div>
