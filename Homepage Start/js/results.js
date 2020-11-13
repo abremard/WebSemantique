@@ -1,10 +1,8 @@
 function buildQuery() {
-    searchString = window.location.search.split("=")[1];
-    sparqlQuery = 'SELECT * WHERE {?jv a dbo:VideoGame. ?jv foaf:name ?name. FILTER ( regex(?jv, "'+searchString+'.*", "i") )}';
-    console.log(sparqlQuery);
+    searchString = decodeURIComponent(window.location.search.split("=")[1]);
+    sparqlQuery = 'SELECT * WHERE {?jv a dbo:VideoGame. ?jv foaf:name ?name. FILTER ( regex(?name, "'+searchString+'.*", "i") )}';
     sparqlQuery = encodeURIComponent(sparqlQuery);
     jsonResponse = sendRequest(sparqlQuery);
-    console.log(jsonResponse);
     jsonParseGameList(jsonResponse);
     return sparqlQuery;
 }
