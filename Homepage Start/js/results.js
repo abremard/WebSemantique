@@ -54,7 +54,7 @@ function jsonParseGameList(jsonObject) {
         } else {
             description = elem.desc.value;
         }
-        tmpHtml += "<p>" + description + "</p></td></tr>";
+        tmpHtml += "<p>" + description + "...</p></td></tr>";
     });
     document.getElementById("resultTable").innerHTML = tmpHtml;
 }

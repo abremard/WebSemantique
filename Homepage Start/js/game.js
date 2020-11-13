@@ -52,15 +52,19 @@ function fillInfo(JSONresponse) {
         
         var jsonData = game.awardName;
         var codeToPlace = "<h3>Awards and recognitions</h3><table><tr id=\"game-awards\">";
+        var awardList = ""
         for (var i = 0; i < jsonData.length; i++) {
             var award = jsonData[i];
             if (award !== null && award !== undefined ) {
-                codeToPlace += "<td><h4><i class=\"material-icons\" style=\"font-size: 16px; color: #edc302;\">emoji_events</i> " + award.value + "</h4></td>"
+                awardList += "<td><h4><i class=\"material-icons\" style=\"font-size: 16px; color: #edc302;\">emoji_events</i> " + award.value + "</h4></td>"
             }
         }
-        codeToPlace += "</tr></table>"
-        document.getElementById("award-panel").innerHTML = codeToPlace;
-        
+        if (awardList!=="")
+        {
+            codeToPlace+=awardList;
+            codeToPlace += "</tr></table><br/>"
+            document.getElementById("award-panel").innerHTML = codeToPlace;
+        } 
     }
 }
 
