@@ -966,6 +966,12 @@ legend {
   margin-top: 25px;
   text-decoration: underline;
 }
+
+.search-results .result-list h2:hover {
+  color: #00b058;
+  cursor: pointer;
+}
+
 .search-results .result-list p {
   font-family: ProductSans;
   font-size: 15px;
