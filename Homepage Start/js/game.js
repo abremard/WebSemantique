@@ -1,11 +1,12 @@
 
 function fillInfo(JSONresponse) {
     var game = JSONresponse;
-    if (game.name !== null && game.name !== undefined) {
+        if (game.name !== null && game.name !== undefined) {
         var gameTitle = game.name.value; // = game.jv.value;
         document.getElementById("game-title").innerHTML = gameTitle;
     }
-    if (game.computingPlatformName !== null && game.computingPlatformName !== undefined) {
+    if (game.computingPlatformName !== null && game.computingPlatformName[0] !== undefined) {
+        // tell Stefan to add platform to html
         var gamePlatform = game.computingPlatformName.value;
         document.getElementById("game-platform").innerHTML = gamePlatform;
         var codeToPlace = "";
@@ -30,8 +31,8 @@ function fillInfo(JSONresponse) {
         var gamePublisher = game.publisherName.value;
         document.getElementById("game-publisher").innerHTML = " Publisher: "+gamePublisher;
     }
-    if (game.composerName !== null && game.composerName !== undefined) {
-        var gameComposer = game.composerName.value;
+    if (game.composerName !== null && game.composerName[0] !== undefined) {
+        var gameComposer = game.composerName[0].value;
         document.getElementById("game-composer").innerHTML = " Composer: "+gameComposer;
     }
     if (game.desc !== null && game.desc !== undefined) {
@@ -47,34 +48,47 @@ function fillInfo(JSONresponse) {
         var releaseDate = game.releaseDate.value;
         document.getElementById("game-release").innerHTML = releaseDate;
     }
-    if (game.seriesName !== null && game.seriesName !== undefined)
-    {
-        var seriesName = game.seriesName.value;
-        document.getElementById("series-name").innerHTML = "This game is a part of the "+seriesName+" series";
-        //call sparql query to get names of video games 
 
-    } else {
-        document.getElementById("gameSeries").style.display = "none";
-    }
-    if (game.awardName !== null && game.awardName !== undefined)
-    {
-        
-        var jsonData = game.awardName;
-        var codeToPlace = "<h3>Awards and recognitions</h3><table><tr id=\"game-awards\">";
-        var awardList = ""
-        for (var i = 0; i < jsonData.length; i++) {
-            var award = jsonData[i];
-            if (award !== null && award !== undefined ) {
-                awardList += "<td><h4><i class=\"material-icons\" style=\"font-size: 16px; color: #edc302;\">emoji_events</i> " + award.value + "</h4></td>"
-            }
-        }
-        if (awardList!=="")
-        {
-            codeToPlace+=awardList;
-            codeToPlace += "</tr></table><br/>"
-            document.getElementById("award-panel").innerHTML = codeToPlace;
-        } 
-    }
+    var url = "https://id.twitch.tv/oauth2/token?client_id=fwjbd711sjss17utbfjasiuraxpjo6&client_secret=sb3u353foqmunyqh2t98y05ezjx905&grant_type=client_credentials";
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "POST", url, false );
+    xmlHttp.send( null );
+    var response = JSON.parse(xmlHttp.response);    
+    var token = response.access_token;
+    var auth = "Bearer "+token;
+
+    payload = 'search "'+game.name.value+'"; limit 1; fields *;';
+
+    url = "	https://clyukqvj83.execute-api.us-west-2.amazonaws.com/production/v4/games";
+    xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "POST", url, false );
+    xmlHttp.setRequestHeader('Client-ID', "fwjbd711sjss17utbfjasiuraxpjo6");
+    xmlHttp.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
+    xmlHttp.setRequestHeader('Access-Control-Allow-Origin', "*");
+    xmlHttp.setRequestHeader("Access-Control-Allow-Methods", "OPTIONS,POST,GET");
+    xmlHttp.setRequestHeader('Authorization', auth);
+    xmlHttp.send( payload );
+    response = JSON.parse(xmlHttp.response);
+    console.log(response);
+
+    payload = 'fields url, width, height; where game = '+response[0].id+';';
+
+    url = "	https://clyukqvj83.execute-api.us-west-2.amazonaws.com/production/v4/artworks";
+    xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "POST", url, false );
+    xmlHttp.setRequestHeader('Client-ID', "fwjbd711sjss17utbfjasiuraxpjo6");
+    xmlHttp.setRequestHeader('Access-Control-Allow-Origin', "*");
+    xmlHttp.setRequestHeader("Access-Control-Allow-Methods", "OPTIONS,POST,GET");
+    xmlHttp.setRequestHeader('Authorization', auth);
+    xmlHttp.send( payload );
+    response = JSON.parse(xmlHttp.response);
+    console.log(response);
+
+    var uri = response[0].url;
+    uri.replace('t_thumb', 't_cover_big');
+
+    document.getElementById('game-image').setAttribute('src', "https:"+uri);
+
 }
 
 function buildQuery() {
