@@ -967,7 +967,13 @@ legend {
   text-decoration: underline;
 }
 
-.search-results .result-list h2:hover {
+@keyframes anim {
+  0% {color: black;}
+  100% {color: #00b058;}
+}
+
+.search-results .result-list tr:hover {
+  animation: anim 0.2s;
   color: #00b058;
   cursor: pointer;
 }
@@ -978,6 +984,7 @@ legend {
   margin-top: 5px;
   margin-bottom: 5px;
 }
+
 
 @media screen and (max-width: 767px) {
   .s006 form .inner-form .input-field {
