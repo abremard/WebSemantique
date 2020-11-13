@@ -49,23 +49,24 @@ function fillInfo(JSONresponse) {
     }
     if (game.awardName !== null && game.awardName !== undefined)
     {
-        var codeToPlace = "";
+        
         var jsonData = game.awardName;
+        var codeToPlace = "<h3>Awards and recognitions</h3><table><tr id=\"game-awards\">";
         for (var i = 0; i < jsonData.length; i++) {
             var award = jsonData[i];
-            codeToPlace += "<td><h4><i class=\"material-icons\" style=\"font-size: 16px; color: #edc302;\">emoji_events</i> " + award.value + "</h4></td>"
+            if (award !== null && award !== undefined ) {
+                codeToPlace += "<td><h4><i class=\"material-icons\" style=\"font-size: 16px; color: #edc302;\">emoji_events</i> " + award.value + "</h4></td>"
+            }
         }
-        document.getElementById("game-awards").innerHTML = codeToPlace;
+        codeToPlace += "</tr></table>"
+        document.getElementById("award-panel").innerHTML = codeToPlace;
         
-    } else 
-    {
-        document.getElementById("award-panel").style.display = "none";
     }
 }
 
 function buildQuery() {
     searchString = decodeURIComponent(window.location.search.split("=")[1]);
-    sparqlQuery = "SELECT ?jv, ?name, ?computingPlatformName, ?seriesName, ?directorName, ?label, ?publisherName, ?developerName, ?composerName, ?score, ?desc, ?releaseDate, ?awardName WHERE {?jv a dbo:VideoGame. OPTIONAL {?jv foaf:name ?name.} OPTIONAL {?jv dbo:abstract ?desc.} OPTIONAL {?jv dbo:genre ?genre.?genre rdfs:label ?label.} OPTIONAL {?jv dbo:composer ?composer.?composer foaf:name ?composerName.} OPTIONAL {?jv dbo:developer ?developer.?developer foaf:name ?developerName.} OPTIONAL {?jv dbo:publisher ?publisher.?publisher foaf:name ?publisherName.} OPTIONAL {?jv dbo:director ?director.?director foaf:name ?directorName.} OPTIONAL{?jv dbo:series ?series.?series rdfs:label ?seriesName.} OPTIONAL{?jv dbo:computingPlatform ?computingPlatform.?computingPlatform rdfs:label ?computingPlatformName.} OPTIONAL{?jv dbp:mc ?score.} OPTIONAL{?jv dbo:releaseDate ?releaseDate.} OPTIONAL{?jv dbp:award ?awardName.} FILTER (?jv = <"+searchString+"> && langMatches(lang(?desc),'EN') && langMatches(lang(?label),'EN') && langMatches(lang(?seriesName),'EN') && langMatches(lang(?computingPlatformName),'EN'))} LIMIT 1";
+    sparqlQuery = "SELECT ?jv, ?name, ?computingPlatformName, ?seriesName, ?directorName, ?label, ?publisherName, ?developerName, ?composerName, str(?score), ?jv2, ?desc, ?releaseDate, ?awardName WHERE { ?jv a dbo:VideoGame. OPTIONAL {?jv foaf:name ?name.} OPTIONAL {?jv dbo:abstract ?desc.} OPTIONAL {?jv dbo:genre ?genre. ?genre rdfs:label ?label.} OPTIONAL {?jv dbp:composer ?composer. ?composer foaf:name ?composerName.} OPTIONAL {?jv dbo:developer ?developer. ?developer foaf:name ?developerName.} OPTIONAL {?jv dbo:publisher ?publisher. ?publisher foaf:name ?publisherName.} OPTIONAL {?jv dbo:director ?director. ?director foaf:name ?directorName.} OPTIONAL{?jv dbo:series ?series. ?series rdfs:label ?seriesName.} OPTIONAL{?jv dbo:computingPlatform ?computingPlatform. ?computingPlatform rdfs:label ?computingPlatformName.} OPTIONAL{?jv dbp:ign ?score.} OPTIONAL{?jv dbo:releaseDate ?releaseDate.}  OPTIONAL{?jv dbp:award ?awardName.} OPTIONAL{?jv dbo:series ?series. ?jv2 dbo:series ?series.} FILTER (?jv = <"+searchString+"> && langMatches(lang(?desc),'EN') && langMatches(lang(?label),'EN') && langMatches(lang(?seriesName),'EN') && langMatches(lang(?computingPlatformName),'EN'))} LIMIT 1"
     sparqlQuery = encodeURIComponent(sparqlQuery);
     jsonResponse = sendRequest(sparqlQuery);
     jsonResponse = removeDuplicates(jsonResponse);
