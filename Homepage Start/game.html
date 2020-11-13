@@ -7,12 +7,14 @@
     <link href="css/game.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="css/circle.css">
+    <script src="./js/jquery-3.5.1.js"></script>
     <script src="js/game.js"></script>
+    <script src="js/index.js"></script>
   </head>
   <body onload="buildQuery();">
     <div class="s006">
-      <img src="images/logo.png" width="80px" style="margin-right: 25px;">
-      <form>
+      <a href="./index.html"><img src="images/logo.png" width="80px" style="margin-right: 25px;" ></a> 
+      <form id="searchForm">
         <fieldset>
           <div class="inner-form">
             <div class="input-field">
@@ -61,25 +63,27 @@
                 </tr>
               </table>
               <br/>
-              <h3 style="color: black;">In this game series</h3>
-              <table style="text-align: center;" id="game-serie">
-                <tr>
-                  <td align="center"><img src="images/supercircuit.jpg" width="150px"></td>
-                  <td align="center"><img src="images/wii.jpg" width="150px"></td>
-                  <td align="center"><img src="images/8.jpg" width="150px"></td>
-                </tr>
-                <tr>
-                  <td width="150px"><h4>Mario Kart: Super Circuit</h4></td>
-                  <td width="150px"><h4>Mario Kart Wii</h4></td>
-                  <td width="150px"><h4>Mario Kart 8</h4></td>
-                </tr>
-              </table>
+              <div id="gameSeries">
+                <h3 style="color: black;">In this game series</h3>
+                <table style="text-align: center;" id="game-serie">
+                  <tr>
+                    <td align="center"><img src="images/supercircuit.jpg" width="150px"></td>
+                    <td align="center"><img src="images/wii.jpg" width="150px"></td>
+                    <td align="center"><img src="images/8.jpg" width="150px"></td>
+                  </tr>
+                  <tr>
+                    <td width="150px"><h4>Mario Kart: Super Circuit</h4></td>
+                    <td width="150px"><h4>Mario Kart Wii</h4></td>
+                    <td width="150px"><h4>Mario Kart 8</h4></td>
+                  </tr>
+                </table>
+              </div>
               <br/>
               <h3 style="color: black;">More Information</h3>
               <table>
                 <tr>
-                  <td><h5 style="font-weight: bold;">Latest Release</h5></td>
-                  <td><h5>Mario Kart 8 (2014-05-29)</h5></td>
+                  <td><h5 style="font-weight: bold;">Computing Platform</h5></td>
+                  <td><h5><span id="platform">-</span></h5></td>
                 </tr>
                 <tr>
                   <td><h5 style="font-weight: bold;">First Release</h5></td>
