@@ -53,8 +53,8 @@ function fillInfo(JSONresponse) {
         
         //code that will be shown for the list of games
         var codeToPlace = "<table style=\"text-align: center;\"> <tr>";
-        var codeImages = ""
-        var codeNames = ""
+        var codeImages = "";
+        var codeNames = "";
 
         //get the list of uri for the associated games in the series
         var jsonData = game.jv2;
@@ -74,7 +74,7 @@ function fillInfo(JSONresponse) {
                 {
                     codeNames += "<td width=\"150px\"><h4>"+response.results.bindings[0].name.value+"</h4></td>";
                     //GET IMAGE HERE INSERT CODE
-                    codeImages += "<td align=\"center\"><img src=\"images/placeholder.png\" width=\"150px\"></td>"
+                    codeImages += "<td align=\"center\"><img src=\"images/placeholder.png\" width=\"150px\"></td>";
                 }
             }
         }
@@ -149,7 +149,19 @@ function fillInfo(JSONresponse) {
 
 function buildQuery() {
     searchString = decodeURIComponent(window.location.search.split("=")[1]);
-    sparqlQuery = "SELECT ?jv, ?name, ?computingPlatformName, ?seriesName, ?directorName, ?label, ?publisherName, ?developerName, ?composerName, str(?score), ?jv2, ?desc, ?releaseDate, ?awardName WHERE { ?jv a dbo:VideoGame. OPTIONAL {?jv rdfs:label ?name.} OPTIONAL {?jv dbo:abstract ?desc.} OPTIONAL {?jv dbo:genre ?genre. ?genre rdfs:label ?label.} OPTIONAL {?jv dbp:composer ?composer. ?composer foaf:name ?composerName.} OPTIONAL {?jv dbo:developer ?developer. ?developer foaf:name ?developerName.} OPTIONAL {?jv dbo:publisher ?publisher. ?publisher foaf:name ?publisherName.} OPTIONAL {?jv dbo:director ?director. ?director foaf:name ?directorName.} OPTIONAL{?jv dbo:series ?series. ?series rdfs:label ?seriesName.} OPTIONAL{?jv dbo:computingPlatform ?computingPlatform. ?computingPlatform rdfs:label ?computingPlatformName.} OPTIONAL{?jv dbp:ign ?score.} OPTIONAL{?jv dbo:releaseDate ?releaseDate.}  OPTIONAL{?jv dbp:award ?awardName.} OPTIONAL{?jv dbo:series ?series. ?jv2 dbo:series ?series.} FILTER (?jv = <"+searchString+"> && langMatches(lang(?desc),'EN') && langMatches(lang(?label),'EN') && langMatches(lang(?seriesName),'EN') && langMatches(lang(?computingPlatformName),'EN') && langMatches(lang(?name),'EN'))} "
+    sparqlQuery = "SELECT ?jv, ?name, ?computingPlatformName, ?seriesName, ?directorName, ?label, ?publisherName,"
+    + "?developerName, ?composerName, str(?score), ?jv2, ?desc, ?releaseDate, ?awardName "
+    + "WHERE { ?jv a dbo:VideoGame. OPTIONAL {?jv rdfs:label ?name.} OPTIONAL {?jv dbo:abstract ?desc.}"
+    + "OPTIONAL {?jv dbo:genre ?genre. ?genre rdfs:label ?label.} OPTIONAL {?jv dbp:composer ?composer. ?composer foaf:name ?composerName.}"
+    + "OPTIONAL {?jv dbo:developer ?developer. ?developer foaf:name ?developerName.}"
+    + "OPTIONAL {?jv dbo:publisher ?publisher. ?publisher foaf:name ?publisherName.}"
+    + "OPTIONAL {?jv dbo:director ?director. ?director foaf:name ?directorName.}"
+    + "OPTIONAL{?jv dbo:series ?series. ?series rdfs:label ?seriesName.}"
+    + "OPTIONAL{?jv dbo:computingPlatform ?computingPlatform. ?computingPlatform rdfs:label ?computingPlatformName.}"
+    + "OPTIONAL{?jv dbp:ign ?score.} OPTIONAL{?jv dbo:releaseDate ?releaseDate.}  OPTIONAL{?jv dbp:award ?awardName.}"
+    + "OPTIONAL{?jv dbo:series ?series. ?jv2 dbo:series ?series.} FILTER (?jv = <"+searchString+"> && langMatches(lang(?desc),'EN')"
+    + "&& langMatches(lang(?label),'EN') && langMatches(lang(?seriesName),'EN') && langMatches(lang(?computingPlatformName),'EN')"
+    + "&& langMatches(lang(?name),'EN'))}"
     sparqlQuery = encodeURIComponent(sparqlQuery);
     jsonResponse = sendRequest(sparqlQuery);
     jsonResponse = removeDuplicates(jsonResponse);
@@ -159,7 +171,7 @@ function buildQuery() {
 
 function buildQueryNameOnly(uri) {
     searchString = uri;
-    sparqlQuery = "SELECT ?jv, ?name WHERE { ?jv a dbo:VideoGame. OPTIONAL {?jv foaf:name ?name.} FILTER (?jv = <"+searchString+">)}"
+    sparqlQuery = "SELECT ?jv, ?name WHERE { ?jv a dbo:VideoGame. OPTIONAL {?jv rdfs:label ?name.} FILTER (?jv = <"+searchString+"> && langMatches(lang(?name),'EN'))}"
     sparqlQuery = encodeURIComponent(sparqlQuery);
     jsonResponse = sendRequest(sparqlQuery);
     return jsonResponse;
