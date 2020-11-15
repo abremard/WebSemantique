@@ -111,7 +111,7 @@ function fillInfo(JSONresponse) {
             coverResponse = JSON.parse(getCover.response);
             console.log(coverResponse);
             var uri = coverResponse[0].url;
-            uri.replace('t_thumb', 't_cover_big');
+            uri = uri.replace('t_thumb', 't_cover_big');
             document.getElementById('game-image').setAttribute('src', "https:"+uri);
         };
         getCover.send( payload );
