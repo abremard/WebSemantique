@@ -48,6 +48,33 @@ function fillInfo(JSONresponse) {
         var releaseDate = game.releaseDate.value;
         document.getElementById("game-release").innerHTML = releaseDate;
     }
+    if (game.seriesName !== null && game.seriesName !== undefined)
+    {
+        var seriesName = game.seriesName.value;
+        document.getElementById("series-name").innerHTML = "This game is a part of the "+seriesName+" series";
+        //call sparql query to get names of video games 
+    } else {
+        document.getElementById("gameSeries").style.display = "none";
+    }
+    if (game.awardName !== null && game.awardName !== undefined)
+    {
+        
+        var jsonData = game.awardName;
+        var codeToPlace = "<h3>Awards and recognitions</h3><table><tr id=\"game-awards\">";
+        var awardList = ""
+        for (var i = 0; i < jsonData.length; i++) {
+            var award = jsonData[i];
+            if (award !== null && award !== undefined ) {
+                awardList += "<td><h4><i class=\"material-icons\" style=\"font-size: 16px; color: #edc302;\">emoji_events</i> " + award.value + "</h4></td>"
+            }
+        }
+        if (awardList!=="")
+        {
+            codeToPlace+=awardList;
+            codeToPlace += "</tr></table><br/>"
+            document.getElementById("award-panel").innerHTML = codeToPlace;
+        } 
+    }
 
     var url = "https://id.twitch.tv/oauth2/token?client_id=fwjbd711sjss17utbfjasiuraxpjo6&client_secret=sb3u353foqmunyqh2t98y05ezjx905&grant_type=client_credentials";
     var xmlHttp = new XMLHttpRequest();
