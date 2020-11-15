@@ -37,6 +37,9 @@ function jsonParseGameList(jsonObject) {
     // print number of games found
     document.getElementById("results-number").innerText = jsonObject.results.bindings.length;
 
+    // print request text in the search field
+    document.getElementById("search").value = decodeURIComponent(window.location.search.split("=")[1]);
+
     var tmpHtml = "";
     jsonObject.results.bindings.forEach(elem => {
         var name = elem.jv.value.split("/resource/")[1];
@@ -88,9 +91,18 @@ function compareResults(object1, object2) {
     }
 }
 
+function searchButton() {
+    let searchString = document.getElementById("search").value;
+    window.location.href = "./Results.html?search="+searchString;
+}
+
 // redundant with body onload
 $(document).ready(function($) {
 
+    $("#searchForm").submit(function() {
+        searchButton();
+        return false;
+    });
     // console.log("ready");
     buildQuery();
 

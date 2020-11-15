@@ -188,7 +188,19 @@ function sendRequest(sparqlQuery) {
     return response;
 }
 
+function searchButton() {
+    let searchString = document.getElementById("search").value;
+    window.location.href = "./Results.html?search="+searchString;
+}
 
-// $(document).ready(function($) {
-//     buildQuery();
-// });
+
+$(document).ready(function($) {
+
+    $("#searchForm").submit(function() {
+        searchButton();
+        return false;
+    });
+
+    buildQuery();
+
+});
