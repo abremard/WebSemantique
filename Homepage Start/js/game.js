@@ -6,9 +6,6 @@ function fillInfo(JSONresponse) {
         document.getElementById("game-title").innerHTML = gameTitle;
     }
     if (game.computingPlatformName !== null && game.computingPlatformName[0] !== undefined) {
-        // tell Stefan to add platform to html
-        var gamePlatform = game.computingPlatformName.value;
-        document.getElementById("game-platform").innerHTML = gamePlatform;
         var codeToPlace = "";
         var jsonData = game.computingPlatformName;
         for (var i = 0; i < jsonData.length; i++) {
@@ -50,9 +47,39 @@ function fillInfo(JSONresponse) {
     }
     if (game.seriesName !== null && game.seriesName !== undefined)
     {
+        //get and show the name of series
         var seriesName = game.seriesName.value;
         document.getElementById("series-name").innerHTML = "This game is a part of the "+seriesName+" series";
-        //call sparql query to get names of video games 
+        
+        //code that will be shown for the list of games
+        var codeToPlace = "<table style=\"text-align: center;\"> <tr>";
+        var codeImages = ""
+        var codeNames = ""
+
+        //get the list of uri for the associated games in the series
+        var jsonData = game.jv2;
+        //limit the number of games to show (can implement a scrolling list somehow?)
+        var dataLimit = 7;
+        if (jsonData.length < 7)
+        {
+            dataLimit = jsonData.length;
+        }
+
+        for (var i = 0; i < dataLimit; i++) {
+            var gameInSeries = jsonData[i];
+            if (gameInSeries !== null && gameInSeries !== undefined ) {
+                //for each uri execute sparql query to find its name
+                var response = buildQueryNameOnly(gameInSeries.value);
+                if (response.results.bindings[0] !== null && response.results.bindings[0] !== undefined)
+                {
+                    codeNames += "<td width=\"150px\"><h4>"+response.results.bindings[0].name.value+"</h4></td>";
+                    //GET IMAGE HERE INSERT CODE
+                    codeImages += "<td align=\"center\"><img src=\"images/placeholder.png\" width=\"150px\"></td>"
+                }
+            }
+        }
+        codeToPlace += codeImages + "</tr><tr>" + codeNames + "</tr><table>";
+        document.getElementById("series-list").innerHTML = codeToPlace;
     } else {
         document.getElementById("gameSeries").style.display = "none";
     }
@@ -128,6 +155,14 @@ function buildQuery() {
     jsonResponse = removeDuplicates(jsonResponse);
     console.log(jsonResponse);
     fillInfo(jsonResponse);
+}
+
+function buildQueryNameOnly(uri) {
+    searchString = uri;
+    sparqlQuery = "SELECT ?jv, ?name WHERE { ?jv a dbo:VideoGame. OPTIONAL {?jv foaf:name ?name.} FILTER (?jv = <"+searchString+">)}"
+    sparqlQuery = encodeURIComponent(sparqlQuery);
+    jsonResponse = sendRequest(sparqlQuery);
+    return jsonResponse;
 }
 
 function sendRequest(sparqlQuery) {
