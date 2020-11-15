@@ -60,21 +60,76 @@ function fillInfo(JSONresponse) {
         var jsonData = game.jv2;
         //limit the number of games to show (can implement a scrolling list somehow?)
 
-        for (var i = 0; i < jsonData.length; i++) {
-            var gameInSeries = jsonData[i];
+        var gameNames = [];
+        var gameInSeries;
+
+        for (let i = 0; i < dataLimit; i++) {
+            gameInSeries = jsonData[i];
             if (gameInSeries !== null && gameInSeries !== undefined ) {
                 //for each uri execute sparql query to find its name
                 var response = buildQueryNameOnly(gameInSeries.value);
                 if (response.results.bindings[0] !== null && response.results.bindings[0] !== undefined)
                 {
-                    codeNames += "<td width=\"150px\" onclick=\"window.location=\'./game.html?game="+gameInSeries.value+"\'\"><h4>"+response.results.bindings[0].name.value+"</h4></td>";
-                    //GET IMAGE HERE INSERT CODE
-                    codeImages += "<td align=\"center\"><img src=\"images/placeholder.png\" width=\"150px\"></td>";
+                    gameNames[i] = response.results.bindings[0].name.value;
+                    imageId = "game-series-"+i;
+                    codeNames += "<td width=\"150px\"><h4>"+response.results.bindings[0].name.value+"</h4></td>";
+                    codeImages += "<td align=\"center\"><img id="+imageId+" src=\"images/placeholder.png\" width=\"150px\"></td>";
                 }
             }
         }
         codeToPlace += codeImages + "</tr><tr>" + codeNames + "</tr><table>";
         document.getElementById("series-list").innerHTML = codeToPlace;
+
+        for (let j = 0; j < dataLimit; j++) {
+            gameInSeries = jsonData[j];
+            if (gameInSeries !== null && gameInSeries !== undefined ) {
+                var name = gameNames[j];
+                var HtmlId = "game-series-"+j;
+                var url = "https://id.twitch.tv/oauth2/token?client_id=fwjbd711sjss17utbfjasiuraxpjo6&client_secret=sb3u353foqmunyqh2t98y05ezjx905&grant_type=client_credentials";
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.open( "POST", url, false );
+                xmlHttp.send( null );
+                var response = JSON.parse(xmlHttp.response);    
+                var token = response.access_token;
+                var auth = "Bearer "+token;
+            
+                payload = 'search "'+name+'"; limit 1; fields *;';
+            
+                // url = "	https://clyukqvj83.execute-api.us-west-2.amazonaws.com/production/v4/games";
+                url = "https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/games";
+                getGameId = new XMLHttpRequest();
+                getGameId.open( "POST", url, false );
+                getGameId.setRequestHeader('Client-ID', "fwjbd711sjss17utbfjasiuraxpjo6");
+                getGameId.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
+                getGameId.setRequestHeader('Access-Control-Allow-Origin', "*");
+                getGameId.setRequestHeader("Access-Control-Allow-Methods", "OPTIONS,POST,GET");
+                getGameId.setRequestHeader('Authorization', auth);
+                getGameId.onload = function () {
+                    gameIdResponse = JSON.parse(getGameId.response);
+                    console.log(gameIdResponse);
+                    payload = 'fields url, width, height; where game = '+gameIdResponse[0].id+';';
+                        // url = "	https://clyukqvj83.execute-api.us-west-2.amazonaws.com/production/v4/covers";
+                    url = "https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/covers";
+                    getCover = new XMLHttpRequest();
+                    getCover.open( "POST", url, false );
+                    getCover.setRequestHeader('Client-ID', "fwjbd711sjss17utbfjasiuraxpjo6");
+                    getCover.setRequestHeader('Access-Control-Allow-Origin', "*");
+                    getCover.setRequestHeader("Access-Control-Allow-Methods", "OPTIONS,POST,GET");
+                    getCover.setRequestHeader('Authorization', auth);
+                    getCover.onload = function() {
+                        coverResponse = JSON.parse(getCover.response);
+                        console.log(coverResponse);
+                        var uri = coverResponse[0].url;
+                        uri = uri.replace('t_thumb', 't_cover_big');
+                        console.log(HtmlId);
+                        document.getElementById(HtmlId).setAttribute('src', "https:"+uri);
+                    };
+                    getCover.send( payload );
+                };
+                getGameId.send( payload );
+            }
+        }
+
     } else {
         document.getElementById("gameSeries").style.display = "none";
     }
@@ -98,6 +153,8 @@ function fillInfo(JSONresponse) {
         } 
     }
 
+    var name = game.name.value;
+    var HtmlId = 'game-image';
     var url = "https://id.twitch.tv/oauth2/token?client_id=fwjbd711sjss17utbfjasiuraxpjo6&client_secret=sb3u353foqmunyqh2t98y05ezjx905&grant_type=client_credentials";
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "POST", url, false );
@@ -106,7 +163,7 @@ function fillInfo(JSONresponse) {
     var token = response.access_token;
     var auth = "Bearer "+token;
 
-    payload = 'search "'+game.name.value+'"; limit 1; fields *;';
+    payload = 'search "'+name+'"; limit 1; fields *;';
 
     // url = "	https://clyukqvj83.execute-api.us-west-2.amazonaws.com/production/v4/games";
     url = "https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/games";
@@ -134,12 +191,12 @@ function fillInfo(JSONresponse) {
             console.log(coverResponse);
             var uri = coverResponse[0].url;
             uri = uri.replace('t_thumb', 't_cover_big');
-            document.getElementById('game-image').setAttribute('src', "https:"+uri);
+            console.log(HtmlId);
+            document.getElementById(HtmlId).setAttribute('src', "https:"+uri);
         };
         getCover.send( payload );
     };
     getGameId.send( payload );
-
 }
 
 function buildQuery() {
