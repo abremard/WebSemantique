@@ -2,8 +2,8 @@ function buildQuery() {
     searchString = decodeURIComponent(window.location.search.split("=")[1]);
     // sparqlQuery = 'SELECT * WHERE {?jv a dbo:VideoGame. ?jv foaf:name ?name. FILTER ( regex(?name, "'+searchString+'.*", "i") )}';
     sparqlQuery = 'SELECT ?jv ?name (MIN(?date) AS ?releaseDate) ?desc WHERE { '
-        + '?jv a dbo:VideoGame. ?jv foaf:name ?name. OPTIONAL{?jv dbo:releaseDate ?date.} OPTIONAL{?jv dbo:abstract ?desc.}'
-        + ' FILTER ( regex(?name, "' + searchString + '.*", "i") && langMatches(lang(?desc),\'EN\')) }'
+        + '?jv a dbo:VideoGame. ?jv rdfs:label ?name. OPTIONAL{?jv dbo:releaseDate ?date.} OPTIONAL{?jv dbo:abstract ?desc.}'
+        + ' FILTER ( regex(?name, "' + searchString + '.*", "i") && langMatches(lang(?desc),\'EN\') && langMatches(lang(?name),\'EN\')) }'
         + 'GROUP BY ?jv ?name ?desc';
 
     sparqlQuery = encodeURIComponent(sparqlQuery);
@@ -18,7 +18,6 @@ function sendRequest(sparqlQuery) {
     xmlHttp.open( "GET", url, false ); // false for synchronous request
     xmlHttp.send( null );
     response = JSON.parse(xmlHttp.response);
-    console.log(response);
     return response;
 }
 
