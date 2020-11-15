@@ -86,35 +86,37 @@ function fillInfo(JSONresponse) {
 
     payload = 'search "'+game.name.value+'"; limit 1; fields *;';
 
-    url = "	https://clyukqvj83.execute-api.us-west-2.amazonaws.com/production/v4/games";
-    xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "POST", url, false );
-    xmlHttp.setRequestHeader('Client-ID', "fwjbd711sjss17utbfjasiuraxpjo6");
-    xmlHttp.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
-    xmlHttp.setRequestHeader('Access-Control-Allow-Origin', "*");
-    xmlHttp.setRequestHeader("Access-Control-Allow-Methods", "OPTIONS,POST,GET");
-    xmlHttp.setRequestHeader('Authorization', auth);
-    xmlHttp.send( payload );
-    response = JSON.parse(xmlHttp.response);
-    console.log(response);
-
-    payload = 'fields url, width, height; where game = '+response[0].id+';';
-
-    url = "	https://clyukqvj83.execute-api.us-west-2.amazonaws.com/production/v4/artworks";
-    xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "POST", url, false );
-    xmlHttp.setRequestHeader('Client-ID', "fwjbd711sjss17utbfjasiuraxpjo6");
-    xmlHttp.setRequestHeader('Access-Control-Allow-Origin', "*");
-    xmlHttp.setRequestHeader("Access-Control-Allow-Methods", "OPTIONS,POST,GET");
-    xmlHttp.setRequestHeader('Authorization', auth);
-    xmlHttp.send( payload );
-    response = JSON.parse(xmlHttp.response);
-    console.log(response);
-
-    var uri = response[0].url;
-    uri.replace('t_thumb', 't_cover_big');
-
-    document.getElementById('game-image').setAttribute('src', "https:"+uri);
+    // url = "	https://clyukqvj83.execute-api.us-west-2.amazonaws.com/production/v4/games";
+    url = "https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/games";
+    getGameId = new XMLHttpRequest();
+    getGameId.open( "POST", url, true );
+    getGameId.setRequestHeader('Client-ID', "fwjbd711sjss17utbfjasiuraxpjo6");
+    getGameId.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
+    getGameId.setRequestHeader('Access-Control-Allow-Origin', "*");
+    getGameId.setRequestHeader("Access-Control-Allow-Methods", "OPTIONS,POST,GET");
+    getGameId.setRequestHeader('Authorization', auth);
+    getGameId.onload = function () {
+        gameIdResponse = JSON.parse(getGameId.response);
+        console.log(gameIdResponse);
+        payload = 'fields url, width, height; where game = '+gameIdResponse[0].id+';';
+            // url = "	https://clyukqvj83.execute-api.us-west-2.amazonaws.com/production/v4/covers";
+        url = "https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/covers";
+        getCover = new XMLHttpRequest();
+        getCover.open( "POST", url, true );
+        getCover.setRequestHeader('Client-ID', "fwjbd711sjss17utbfjasiuraxpjo6");
+        getCover.setRequestHeader('Access-Control-Allow-Origin', "*");
+        getCover.setRequestHeader("Access-Control-Allow-Methods", "OPTIONS,POST,GET");
+        getCover.setRequestHeader('Authorization', auth);
+        getCover.onload = function() {
+            coverResponse = JSON.parse(getCover.response);
+            console.log(coverResponse);
+            var uri = coverResponse[0].url;
+            uri.replace('t_thumb', 't_cover_big');
+            document.getElementById('game-image').setAttribute('src', "https:"+uri);
+        };
+        getCover.send( payload );
+    };
+    getGameId.send( payload );
 
 }
 
