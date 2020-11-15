@@ -145,7 +145,7 @@ function fillInfo(JSONresponse) {
 function buildQuery() {
     searchString = decodeURIComponent(window.location.search.split("=")[1]);
     sparqlQuery = "SELECT ?jv, ?name, ?computingPlatformName, ?seriesName, ?directorName, ?label, ?publisherName,"
-    + "?developerName, ?composerName, str(?score), ?jv2, ?desc, ?releaseDate, ?awardName "
+    + "?developerName, ?composerName, ?score, ?jv2, ?desc, ?releaseDate, ?awardName "
     + "WHERE { ?jv a dbo:VideoGame. OPTIONAL {?jv rdfs:label ?name.} OPTIONAL {?jv dbo:abstract ?desc.}"
     + "OPTIONAL {?jv dbo:genre ?genre. ?genre rdfs:label ?label.} OPTIONAL {?jv dbp:composer ?composer. ?composer foaf:name ?composerName.}"
     + "OPTIONAL {?jv dbo:developer ?developer. ?developer foaf:name ?developerName.}"
