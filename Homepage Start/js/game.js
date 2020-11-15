@@ -80,13 +80,15 @@ function fillInfo(JSONresponse) {
                 if (response.results.bindings[0] !== null && response.results.bindings[0] !== undefined)
                 {
                     gameNames[i] = response.results.bindings[0].name.value;
+                    var gameUri = gameInSeries.value;
+                    gameUri = gameUri.split("'").join("%27");
                     imageId = "game-series-"+i;
-                    codeNames += "<td width=\"150px\"><h4>"+response.results.bindings[0].name.value+"</h4></td>";
+                    codeNames += "<td width=\"150px\" onclick=\"window.location=\'./game.html?game="+gameUri+"\'\"><h4>"+response.results.bindings[0].name.value+"</h4></td>";
                     codeImages += "<td align=\"center\"><img id="+imageId+" src=\"images/placeholder.png\" width=\"150px\"></td>";
                 }
             }
         }
-        codeToPlace += codeImages + "</tr><tr>" + codeNames + "</tr><table>";
+        codeToPlace += codeImages + "</tr><tr>" + codeNames + "</tr></table>";
         document.getElementById("series-list").innerHTML = codeToPlace;
 
         for (let j = 0; j < jsonData.length; j++) {
