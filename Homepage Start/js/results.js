@@ -8,6 +8,10 @@ function buildQuery() {
 
     sparqlQuery = encodeURIComponent(sparqlQuery);
     jsonResponse = sendRequest(sparqlQuery);
+    console.log(jsonResponse.results.bindings);
+    console.log("============ SORT ============");
+    jsonResponse.results.bindings = jsonResponse.results.bindings.sort(compareResults);
+    console.log(jsonResponse.results.bindings);
     jsonParseGameList(jsonResponse);
     return sparqlQuery;
 }
@@ -64,9 +68,35 @@ function jsonParseGameList(jsonObject) {
     document.getElementById("resultTable").innerHTML = tmpHtml;
 }
 
-$(document).ready(function($) {
+// returns 1 if object1 > object2, 0 if equal and -1 if object1 < object2
+// convention : undefined < any
+function compareResults(object1, object2) {
+    if (object1.name !== undefined){
+        if(object2.name !== undefined) {   // everything is defined
+            if (object1.name.value > object2.name.value) {
+                console.log("1 > 2");
+                return 1;
+            } else if (object1.name.value < object2.name.value) {
+                console.log("1 < 2");
+                return -1;
+            } else {
+                console.log("1 = 2");
+                return 0;
+            }
+        } else {    // object2.name undefined
+            console.log("2 undef");
+            return 1;
+        }
+    } else {
+        console.log("1 undef");
+        return -1;
+    }
+}
 
-    console.log("ready");
-    buildQuery();
-
-});
+// redundant with body onload
+// $(document).ready(function($) {
+//
+//     console.log("ready");
+//     buildQuery();
+//
+// });
