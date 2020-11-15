@@ -1027,6 +1027,11 @@ legend {
   font-weight: normal;
 }
 
+.game-panel .information h4:hover {
+  color: #00b058;
+  cursor: pointer;
+}
+
 .game-panel .information h5 {
   font-family: ProductSans;
   font-size: 15px;
