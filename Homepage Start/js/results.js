@@ -37,6 +37,9 @@ function jsonParseGameList(jsonObject) {
 
     const descSizeLimit = 140;
 
+    // print number of games found
+    document.getElementById("results-number").innerText = jsonObject.results.bindings.length;
+
     var tmpHtml = "";
     jsonObject.results.bindings.forEach(elem => {
         var name = elem.jv.value.split("/resource/")[1];
@@ -74,29 +77,24 @@ function compareResults(object1, object2) {
     if (object1.name !== undefined){
         if(object2.name !== undefined) {   // everything is defined
             if (object1.name.value > object2.name.value) {
-                console.log("1 > 2");
                 return 1;
             } else if (object1.name.value < object2.name.value) {
-                console.log("1 < 2");
                 return -1;
             } else {
-                console.log("1 = 2");
                 return 0;
             }
         } else {    // object2.name undefined
-            console.log("2 undef");
             return 1;
         }
     } else {
-        console.log("1 undef");
         return -1;
     }
 }
 
 // redundant with body onload
-// $(document).ready(function($) {
-//
-//     console.log("ready");
-//     buildQuery();
-//
-// });
+$(document).ready(function($) {
+
+    console.log("ready");
+    buildQuery();
+
+});

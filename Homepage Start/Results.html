@@ -9,7 +9,8 @@
     <script src="js/results.js"></script>
 <!--    <script src="js/index.js"></script>-->
   </head>
-  <body onload="buildQuery()">
+<!--  <body onload="buildQuery()">-->
+  <body>
     <div class="s006">
       <a href="./index.html"><img src="images/logo.png" width="80px" style="margin-right: 25px;" ></a>
       <form id="searchForm">
@@ -29,7 +30,7 @@
     </div>
     <div class="search-results">
         <div class="result-header">
-          <p>We found these results for your query. Go explore!</p>
+          <p>We found <span id="results-number"></span> results for your query. Go explore!</p>
         </div>
         <div class="result-list">
           <table>
