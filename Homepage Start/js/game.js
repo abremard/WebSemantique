@@ -44,6 +44,9 @@ function fillInfo(JSONresponse) {
     }
     if (game.score !== null && game.score !== undefined) {
         var gameScore = game.score.value;
+        if (gameScore <= 10) {
+            gameScore *= 10;
+        }
         document.getElementById("game-score").className = "c100 p"+gameScore+" small green";
         document.getElementById("game-score-span").innerHTML = gameScore;
     }
