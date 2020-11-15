@@ -67,7 +67,7 @@ function fillInfo(JSONresponse) {
                 var response = buildQueryNameOnly(gameInSeries.value);
                 if (response.results.bindings[0] !== null && response.results.bindings[0] !== undefined)
                 {
-                    codeNames += "<td width=\"150px\"><h4>"+response.results.bindings[0].name.value+"</h4></td>";
+                    codeNames += "<td width=\"150px\" onclick=\"window.location=\'./game.html?game="+gameInSeries.value+"\'\"><h4>"+response.results.bindings[0].name.value+"</h4></td>";
                     //GET IMAGE HERE INSERT CODE
                     codeImages += "<td align=\"center\"><img src=\"images/placeholder.png\" width=\"150px\"></td>";
                 }
