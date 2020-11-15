@@ -8,10 +8,7 @@ function buildQuery() {
 
     sparqlQuery = encodeURIComponent(sparqlQuery);
     jsonResponse = sendRequest(sparqlQuery);
-    console.log(jsonResponse.results.bindings);
-    console.log("============ SORT ============");
     jsonResponse.results.bindings = jsonResponse.results.bindings.sort(compareResults);
-    console.log(jsonResponse.results.bindings);
     jsonParseGameList(jsonResponse);
     return sparqlQuery;
 }
@@ -94,7 +91,7 @@ function compareResults(object1, object2) {
 // redundant with body onload
 $(document).ready(function($) {
 
-    console.log("ready");
+    // console.log("ready");
     buildQuery();
 
 });
