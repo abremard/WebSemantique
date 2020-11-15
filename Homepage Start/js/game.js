@@ -59,13 +59,8 @@ function fillInfo(JSONresponse) {
         //get the list of uri for the associated games in the series
         var jsonData = game.jv2;
         //limit the number of games to show (can implement a scrolling list somehow?)
-        var dataLimit = 7;
-        if (jsonData.length < 7)
-        {
-            dataLimit = jsonData.length;
-        }
 
-        for (var i = 0; i < dataLimit; i++) {
+        for (var i = 0; i < jsonData.length; i++) {
             var gameInSeries = jsonData[i];
             if (gameInSeries !== null && gameInSeries !== undefined ) {
                 //for each uri execute sparql query to find its name
