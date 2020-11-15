@@ -69,7 +69,7 @@ function fillInfo(JSONresponse) {
         var gameNames = [];
         var gameInSeries;
 
-        for (let i = 0; i < dataLimit; i++) {
+        for (let i = 0; i < jsonData.length; i++) {
             gameInSeries = jsonData[i];
             if (gameInSeries !== null && gameInSeries !== undefined ) {
                 //for each uri execute sparql query to find its name
@@ -86,7 +86,7 @@ function fillInfo(JSONresponse) {
         codeToPlace += codeImages + "</tr><tr>" + codeNames + "</tr><table>";
         document.getElementById("series-list").innerHTML = codeToPlace;
 
-        for (let j = 0; j < dataLimit; j++) {
+        for (let j = 0; j < jsonData.length; j++) {
             gameInSeries = jsonData[j];
             if (gameInSeries !== null && gameInSeries !== undefined ) {
                 var name = gameNames[j];
