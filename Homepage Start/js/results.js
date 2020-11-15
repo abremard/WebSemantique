@@ -2,7 +2,7 @@ function buildQuery() {
     searchString = decodeURIComponent(window.location.search.split("=")[1]);
     // sparqlQuery = 'SELECT * WHERE {?jv a dbo:VideoGame. ?jv foaf:name ?name. FILTER ( regex(?name, "'+searchString+'.*", "i") )}';
     sparqlQuery = 'SELECT ?jv ?name (MIN(?date) AS ?releaseDate) ?desc WHERE { '
-        + '?jv a dbo:VideoGame. ?jv foaf:name ?name. ?jv dbo:releaseDate ?date. ?jv dbo:abstract ?desc.'
+        + '?jv a dbo:VideoGame. ?jv foaf:name ?name. OPTIONAL{?jv dbo:releaseDate ?date.} OPTIONAL{?jv dbo:abstract ?desc.}'
         + ' FILTER ( regex(?name, "' + searchString + '.*", "i") && langMatches(lang(?desc),\'EN\')) }'
         + 'GROUP BY ?jv ?name ?desc';
 
@@ -18,6 +18,7 @@ function sendRequest(sparqlQuery) {
     xmlHttp.open( "GET", url, false ); // false for synchronous request
     xmlHttp.send( null );
     response = JSON.parse(xmlHttp.response);
+    console.log(response);
     return response;
 }
 
@@ -45,14 +46,19 @@ function jsonParseGameList(jsonObject) {
             tmpHtml += "<h2>"+name+"</h2>";            
         }
 
-        var year = elem.releaseDate.value;
+        var year = "";
+        if (elem.releaseDate !== null && elem.releaseDate !== undefined) {
+            year = elem.releaseDate.value;            
+        }
         tmpHtml += "<p><i>"+year+"</i></p>";
 
         var description = "";
-        if (elem.desc.value.length > descSizeLimit){
-            description = elem.desc.value.slice(0, descSizeLimit) + "...";
-        } else {
-            description = elem.desc.value;
+        if (elem.desc !== null && elem.desc !== undefined) {
+            if (elem.desc.value.length > descSizeLimit){
+                description = elem.desc.value.slice(0, descSizeLimit) + "...";
+            } else {
+                description = elem.desc.value;
+            }            
         }
         tmpHtml += "<p>" + description + "...</p></td></tr>";
     });
