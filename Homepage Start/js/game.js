@@ -87,7 +87,7 @@ function fillInfo(JSONresponse) {
         for (var i = 0; i < jsonData.length; i++) {
             var award = jsonData[i];
             if (award !== null && award !== undefined ) {
-                awardList += "<td><h4><i class=\"material-icons\" style=\"font-size: 16px; color: #edc302;\">emoji_events</i> " + award.value + "</h4></td>"
+                awardList += "<td><h4 style=\"cursor: auto;\"><i class=\"material-icons\" style=\"font-size: 16px; color: #edc302;\">emoji_events</i> " + award.value + "</h4></td>"
             }
         }
         if (awardList!=="")
