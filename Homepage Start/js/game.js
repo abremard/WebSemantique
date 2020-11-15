@@ -8,12 +8,18 @@ function fillInfo(JSONresponse) {
     if (game.computingPlatformName !== null && game.computingPlatformName[0] !== undefined) {
         var codeToPlace = "";
         var jsonData = game.computingPlatformName;
-        for (var i = 0; i < jsonData.length; i++) {
+        for (var i = 0; i < jsonData.length - 1; i++) {
             var platform = jsonData[i];
             if (platform !== null && platform !== undefined ) {
                 codeToPlace += platform.value + ", ";
             }
         }
+        // last platform (no ',')
+        var platform = jsonData[jsonData.length - 1];
+        if (platform !== null && platform !== undefined ) {
+            codeToPlace += platform.value;
+        }
+
         document.getElementById("game-platform").innerHTML = codeToPlace;
     }
     if (game.label !== null && game.label !== undefined) {
@@ -239,7 +245,19 @@ function sendRequest(sparqlQuery) {
     return response;
 }
 
+function searchButton() {
+    let searchString = document.getElementById("search").value;
+    window.location.href = "./Results.html?search="+searchString;
+}
 
-// $(document).ready(function($) {
-//     buildQuery();
-// });
+
+$(document).ready(function($) {
+
+    $("#searchForm").submit(function() {
+        searchButton();
+        return false;
+    });
+
+    buildQuery();
+
+});

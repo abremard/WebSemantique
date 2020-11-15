@@ -8,10 +8,7 @@ function buildQuery() {
 
     sparqlQuery = encodeURIComponent(sparqlQuery);
     jsonResponse = sendRequest(sparqlQuery);
-    console.log(jsonResponse.results.bindings);
-    console.log("============ SORT ============");
     jsonResponse.results.bindings = jsonResponse.results.bindings.sort(compareResults);
-    console.log(jsonResponse.results.bindings);
     jsonParseGameList(jsonResponse);
     return sparqlQuery;
 }
@@ -39,6 +36,9 @@ function jsonParseGameList(jsonObject) {
 
     // print number of games found
     document.getElementById("results-number").innerText = jsonObject.results.bindings.length;
+
+    // print request text in the search field
+    document.getElementById("search").value = decodeURIComponent(window.location.search.split("=")[1]);
 
     var tmpHtml = "";
     jsonObject.results.bindings.forEach(elem => {
@@ -91,10 +91,19 @@ function compareResults(object1, object2) {
     }
 }
 
+function searchButton() {
+    let searchString = document.getElementById("search").value;
+    window.location.href = "./Results.html?search="+searchString;
+}
+
 // redundant with body onload
 $(document).ready(function($) {
 
-    console.log("ready");
+    $("#searchForm").submit(function() {
+        searchButton();
+        return false;
+    });
+    // console.log("ready");
     buildQuery();
 
 });
