@@ -165,16 +165,11 @@ function xhrSuccess() {
     this.callback.apply(this); 
 }
 
-function xhrError() { 
-    console.error(this.statusText); 
-}
-
 function getToken(url, callback, jsonData, gameNames, game) {
     var xhr = new XMLHttpRequest();
     xhr.callback = callback;
     xhr.arguments = Array.prototype.slice.call(arguments, 2);
     xhr.onload = xhrSuccess;
-    xhr.onerror = xhrError;
     xhr.open("POST", url, true);
     xhr.send(null);
 }
@@ -208,7 +203,6 @@ function getGameId(url, callback, auth, name, HtmlId) {
     xhr.callback = callback;
     xhr.arguments = Array.prototype.slice.call(arguments, 2);
     xhr.onload = xhrSuccess;
-    xhr.onerror = xhrError;
     xhr.open("POST", url, true);
     xhr.setRequestHeader('Client-ID', "fwjbd711sjss17utbfjasiuraxpjo6");
     xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -223,16 +217,15 @@ function handleGameId() {
     var auth = this.arguments[0];
     var HtmlId = this.arguments[2];
     var gameId = response[0].id;
-    getCover("https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/covers", handleCover, auth, gameId, HtmlId);
+    getCover("https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/covers", handleCover, auth, gameId, HtmlId, 0);
 }
 
-function getCover(url, callback, auth, gameId, HtmlId) {
+function getCover(url, callback, auth, gameId, HtmlId, retries) {
     payload = 'fields url, width, height; where game = '+gameId+';';
     var xhr = new XMLHttpRequest();
     xhr.callback = callback;
     xhr.arguments = Array.prototype.slice.call(arguments, 2);
     xhr.onload = xhrSuccess;
-    xhr.onerror = xhrError;
     xhr.open("POST", url, true);
     xhr.setRequestHeader('Client-ID', "fwjbd711sjss17utbfjasiuraxpjo6");
     xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -243,6 +236,10 @@ function getCover(url, callback, auth, gameId, HtmlId) {
 }
 
 function handleCover() {
+    if (this.status !== 200 && this.arguments[3] < 5) {
+        this.arguments[3] = this.arguments[3] + 1;
+        getCover("https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/covers", handleCover, this.arguments[0], this.arguments[1], this.arguments[2], this.arguments[3]);
+    }
     var response = JSON.parse(this.responseText);
     var HtmlId = this.arguments[2];
     var uri = response[0].url;
